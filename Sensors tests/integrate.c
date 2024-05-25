@@ -20,8 +20,6 @@ sbit LCD_D4_Direction at TRISB0_bit;
 // initailzations
 char cardnumber[14];
 int i;
-float ldr;
-
 void Rotation0();
 void Rotation180();
 void Rotation90();
@@ -32,7 +30,7 @@ void defualtLCD();
 void main() {
 
     init_home();
-    
+
     while (1) {
 
         // Scan RFID card (Phase 1)
@@ -44,11 +42,12 @@ void main() {
             delay_ms(2000);
             if (cardnumber[0] == '1'){
                 Lcd_Out(2, 1, " Welcome Home!");
-                PORTD.B7 = 1; // turn on green led
-                PORTD.B4 = 1; // turn on buzzer
+                PORTD.B7 = 1;
+                PORTD.B4 = 1;
                 delay_ms(1000);
-                PORTD.B4 = 0;   // turn off buzzer 
-                Rotation180();
+                PORTD.B4 = 0;
+                PORTD.B3 = 0;
+                Rotation180() ;
                 delay_ms(2000);
                 Rotation90();
 
@@ -69,9 +68,9 @@ void main() {
 
         // Fire Alarm (Phase 2)
         if (PORTB.B6 == 1) {
-            // Turn on the blue LED
+            // Turn on the LED
             PORTD.B5 = 1;
-            // Turn on Fan 
+            // Turn on Fan
             PORTD.B3 = 1;
 
             Lcd_Cmd(_LCD_CLEAR);
@@ -81,6 +80,8 @@ void main() {
             PORTD.B4 = 1;
             delay_ms(1000);
             PORTD.B4 = 0;
+
+
             Lcd_Cmd(_LCD_CLEAR);
             defualtLCD();
         } else {
@@ -89,28 +90,6 @@ void main() {
             // Turn off Fan
             PORTD.B3 = 0;
         }
-    
-        // Laser Alert (Phase 3)
-        ldr = ADC_Read(0);
-        if (ldr < 850){
-            Lcd_Cmd(_LCD_CLEAR);
-            Lcd_Out(1,1,"Thief detected!!");
-            Lcd_Out(2,1,"Call 911");
-            
-            for (i=0;i<3;i++){
-                PORTD.B4 = 1;
-                PORTD.B5 = 1;
-                PORTD.B6 = 1;
-                PORTD.B7 = 1;
-                delay_ms(200);
-                PORTD.B4 = 0;
-                PORTD.B5 = 0;
-                PORTD.B6 = 0;
-                PORTD.B7 = 0;
-            }
-            Lcd_Cmd(_LCD_CLEAR);
-            defualtLCD();
-        } 
     }
 }
 
@@ -118,20 +97,17 @@ void init_home(){
     // set port D as output
     TRISD = 0x00;
     PORTD = 0x00;
-    // set Flame sensor to input
     TRISB.B6 = 1;
-
     uart1_init(9600);
     Delay_ms(100);              // Wait for UART module to stabilize
     Rotation0();
     Lcd_Init();                 // Initialize LCD
-    Delay_ms(100);              // Wait for UART module to stabilize
-    ADC_Init();
-    Delay_ms(100);              // Wait for UART module to stabilize
     Lcd_Cmd(_LCD_CLEAR);
     Lcd_Cmd(_LCD_CURSOR_OFF);   // Cursor off
     Lcd_Out(1, 1, "  Happy House");
-
+    // print heart in second row
+//    Lcd_Chr(2, 1, 0);
+ ////    Rotation0();
 }
 
 void AlertBuzzer(){
@@ -160,7 +136,6 @@ void Rotation0() // 0 Degree
         Delay_us(19000);
     }
 }
-
 void Rotation90() // 180 Degree
 {
     unsigned int i;

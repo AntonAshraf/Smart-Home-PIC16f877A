@@ -23,36 +23,36 @@ void main() {
  Delay_ms(100);
  Lcd_Cmd(_LCD_CURSOR_OFF);
  Delay_ms(10);
- 
- ADC_Init(); 
+
+ ADC_Init();
  Delay_ms(100);
- 
+
  TRISC.F0 = 0;
  PORTC.F0 = 0;
  Delay_ms(100);
- 
+
  while(1)
  {
- 
+
   ldr = ADC_Read(0);
   Delay_ms(50);
   FloatToStr(ldr, ldr1);
   Delay_ms(50);
   Lcd_Out(1, 1, ldr1);
   Delay_ms(50);
-  
-  if ( ldr > 450 )
+
+  if ( ldr > 80 )
   {
-   PORTC.F0 = 1;
-   Lcd_Out(2, 1, " LED ON ");
-  }
-  else if ( ldr < 450 )
-  {
-   PORTC.F0 = 0;
+//    PORTC.F0 = 1;
    Lcd_Out(2, 1, " LED OFF ");
   }
-  
-  
-  
+  else if ( ldr < 80 )
+  {
+//    PORTC.F0 = 0;
+   Lcd_Out(2, 1, " LED ON ");
+  }
+
+
+
  }
 }

@@ -1,15 +1,18 @@
 #include <SPI.h>
 #include <RFID.h>
+
 #define SS_PIN 10
 #define RST_PIN 9
+
 RFID rfid(SS_PIN, RST_PIN);
 
 String rfidCard;
 String lastRfidCard;
+unsigned long lastReadTime = 0;  // Variable to store the time when the last card was read
+const unsigned long resetTime = 2000;  // Time in milliseconds to reset the lastRfidCard (2000ms = 2s)
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("Starting the RFID Reader...");
   SPI.begin();
   rfid.init();
 }
@@ -27,15 +30,22 @@ void loop() {
         // Send the character array via UART
         Serial.write(rfidCardArray);
         Serial.write('.');
-        // Serial.write("\r\n"); // Add a newline for better readability in UART
         
         // Optionally also print to Serial Monitor
         // Serial.println(rfidCard);
         
         // Update the last read card
         lastRfidCard = rfidCard;
+        
+        // Update the time when the last card was read
+        lastReadTime = millis();
       }
     }
     rfid.halt();
+  }
+
+  // Check if 2 seconds have passed since the last card was read
+  if (millis() - lastReadTime > resetTime) {
+    lastRfidCard = "";  // Reset the lastRfidCard to an empty value
   }
 }
