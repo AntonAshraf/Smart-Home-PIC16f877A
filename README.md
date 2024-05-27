@@ -159,7 +159,7 @@ Connect the RFID module with the **Arduino UNO** as follows:
 clone the repository and open the project in MikroC for PIC. Compile the project and load the hex file into the PIC16f877A microcontroller using the PIC programmer. Connect the components as per the circuit diagram. Run the project and enjoy the smart happy home system.
 
 ## Author
-- [Mahmoud Hany Fathallah]()
+- [Mahmoud Hany Fathallah](https://github.com/MahmoudHanyFathalla)
 - [Nouran Mostafa]()
 - [Salma Ismail]()
 - [Anton Ashraf]()
