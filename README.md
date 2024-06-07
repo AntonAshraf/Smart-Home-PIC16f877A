@@ -189,6 +189,6 @@ clone the repository and open the project in MikroC for PIC. Compile the project
 ## 👥collaborators
 - [Mahmoud Hany Fathallah](https://github.com/MahmoudHanyFathalla)
 - [Nouran Mostafa](https://github.com/NouranMOS)
-- [Salma Ismail]()
+- [Salma Ismail](https://github.com/SalmaAzab)
 - [Anton Ashraf](https://github.com/AntonAshraf)
 
